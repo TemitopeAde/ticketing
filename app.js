@@ -115,9 +115,10 @@ app.use(express.json());
 // });
 
 app.post('/webhook', (req, res) => {
-  // Process the received webhook data here
+  // Process the received webhook data here'
+  
   const webhookData = req.body;
-  console.log('Received webhook data:', webhookData);
+  console.log('Received webhook data:', webhookData, req);
 
   // Send a response
   res.status(200).send('Webhook data received successfully.');
