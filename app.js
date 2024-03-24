@@ -25,7 +25,7 @@ const Product = mongoose.model('Product', productSchema);
 
 app.get('/api/items', async (req, res) => {
   console.log(req.query);
-  
+
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 20;
@@ -84,9 +84,9 @@ app.get('/api/search', async (req, res) => {
 
   const searchQuery = req?.query?.term || '';
   const regex = new RegExp(searchQuery, 'i');
-  
+
   try {
-   
+
     const items = await Product.find({
       $or: [
         { NAME: regex },
@@ -98,7 +98,7 @@ app.get('/api/search', async (req, res) => {
     })
 
     // console.log(items);
-      
+
     if (!items || items.length === 0) {
       return res.status(404).json({ message: "Not found" });
     }
@@ -112,6 +112,15 @@ app.get('/api/search', async (req, res) => {
     console.error('Error fetching items:', error);
     return res.status(500).json({ message: "Internal server error" });
   }
+});
+
+app.post('/webhook', (req, res) => {
+  // Process the received webhook data here
+  const webhookData = req.body;
+  console.log('Received webhook data:', webhookData);
+
+  // Send a response
+  res.status(200).send('Webhook data received successfully.');
 });
 
 
