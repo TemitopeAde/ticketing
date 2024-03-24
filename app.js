@@ -8,111 +8,111 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-const mongoUri = 'mongodb+srv://hellenmara1212:Temade123@cluster0.v03ddg2.mongodb.net/items';
+// const mongoUri = 'mongodb+srv://hellenmara1212:Temade123@cluster0.v03ddg2.mongodb.net/items';
 
-mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-
-const productSchema = new mongoose.Schema({
-  // Define your schema here
-  // Example:
-  title: String,
-  description: String,
-  // Add other fields as needed
-}, { collection: "items" });
-
-const Product = mongoose.model('Product', productSchema);
-
-app.get('/api/items', async (req, res) => {
-  console.log(req.query);
-
-  try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 20;
-    const searchQuery = req.query.search || '';
-
-    const regex = new RegExp(searchQuery, 'i');
-
-    const count = await Product.countDocuments({
-      $or: [
-        { NAME: regex },
-        { VENUE: regex },
-        { CITY: regex },
-        { CATEGORY: regex },
-        { TYPE: regex }
-        // Add more fields if needed
-      ]
-    })
-      .exec();
+// mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
-    const totalPages = Math.ceil(count / limit);
+// const productSchema = new mongoose.Schema({
+//   // Define your schema here
+//   // Example:
+//   title: String,
+//   description: String,
+//   // Add other fields as needed
+// }, { collection: "items" });
 
-    const items = await Product.find({
-      $or: [
-        { NAME: regex },
-        { VENUE: regex },
-        { CITY: regex },
-        { CATEGORY: regex },
-        { TYPE: regex }
-        // Add more fields if needed
-      ]
-    })
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .exec();
+// const Product = mongoose.model('Product', productSchema);
 
-    if (!items || items.length === 0) {
-      return res.status(404).json({ message: "Not found" });
-    }
+// app.get('/api/items', async (req, res) => {
+//   console.log(req.query);
 
-    res.status(200).json({
-      items,
-      pagination: { current: page, totalPages, totalItems: count }
-    });
+//   try {
+//     const page = parseInt(req.query.page) || 1;
+//     const limit = parseInt(req.query.limit) || 20;
+//     const searchQuery = req.query.search || '';
 
-    console.log(items.length);
-  } catch (error) {
-    console.error('Error fetching items:', error);
-    return res.status(500).json({ message: "Internal server error" });
-  }
-});
+//     const regex = new RegExp(searchQuery, 'i');
 
-app.get('/api/search', async (req, res) => {
-  console.log(req.query.term);
+//     const count = await Product.countDocuments({
+//       $or: [
+//         { NAME: regex },
+//         { VENUE: regex },
+//         { CITY: regex },
+//         { CATEGORY: regex },
+//         { TYPE: regex }
+//         // Add more fields if needed
+//       ]
+//     })
+//       .exec();
 
 
-  const searchQuery = req?.query?.term || '';
-  const regex = new RegExp(searchQuery, 'i');
+//     const totalPages = Math.ceil(count / limit);
 
-  try {
+//     const items = await Product.find({
+//       $or: [
+//         { NAME: regex },
+//         { VENUE: regex },
+//         { CITY: regex },
+//         { CATEGORY: regex },
+//         { TYPE: regex }
+//         // Add more fields if needed
+//       ]
+//     })
+//       .skip((page - 1) * limit)
+//       .limit(limit)
+//       .exec();
 
-    const items = await Product.find({
-      $or: [
-        { NAME: regex },
-        // { VENUE: regex },
-        // { CITY: regex },
-        // { CATEGORY: regex },
-        // { TYPE: regex } 
-      ]
-    })
+//     if (!items || items.length === 0) {
+//       return res.status(404).json({ message: "Not found" });
+//     }
 
-    // console.log(items);
+//     res.status(200).json({
+//       items,
+//       pagination: { current: page, totalPages, totalItems: count }
+//     });
 
-    if (!items || items.length === 0) {
-      return res.status(404).json({ message: "Not found" });
-    }
+//     console.log(items.length);
+//   } catch (error) {
+//     console.error('Error fetching items:', error);
+//     return res.status(500).json({ message: "Internal server error" });
+//   }
+// });
 
-    res.status(200).json({
-      items
-    });
+// app.get('/api/search', async (req, res) => {
+//   console.log(req.query.term);
 
-    console.log(items.length);
-  } catch (error) {
-    console.error('Error fetching items:', error);
-    return res.status(500).json({ message: "Internal server error" });
-  }
-});
+
+//   const searchQuery = req?.query?.term || '';
+//   const regex = new RegExp(searchQuery, 'i');
+
+//   try {
+
+//     const items = await Product.find({
+//       $or: [
+//         { NAME: regex },
+//         // { VENUE: regex },
+//         // { CITY: regex },
+//         // { CATEGORY: regex },
+//         // { TYPE: regex } 
+//       ]
+//     })
+
+//     // console.log(items);
+
+//     if (!items || items.length === 0) {
+//       return res.status(404).json({ message: "Not found" });
+//     }
+
+//     res.status(200).json({
+//       items
+//     });
+
+//     console.log(items.length);
+//   } catch (error) {
+//     console.error('Error fetching items:', error);
+//     return res.status(500).json({ message: "Internal server error" });
+//   }
+// });
 
 app.post('/webhook', (req, res) => {
   // Process the received webhook data here
