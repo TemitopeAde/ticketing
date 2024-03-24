@@ -7,6 +7,7 @@ const port = 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.json());
 
 // const mongoUri = 'mongodb+srv://hellenmara1212:Temade123@cluster0.v03ddg2.mongodb.net/items';
 
@@ -114,9 +115,9 @@ app.use(express.json());
 //   }
 // });
 
+// Route to handle incoming webhook data
 app.post('/webhook', (req, res) => {
-  // Process the received webhook data here'
-  
+  // Process the received webhook data here
   const webhookData = req.body;
   console.log('Received webhook data:', webhookData, req);
 
